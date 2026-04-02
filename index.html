@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>42Battle - Character Documentation</title>
+    <link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-brand" id="homeBtn">
+                <div class="brand-logo">⚔</div>
+                <div>
+                    <div class="brand-title">42Battle</div>
+                    <div class="brand-sub">Character Documentation</div>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a class="nav-link nav-link-home active" id="navHome">
+                    <span class="nav-icon">⌂</span> Overview
+                </a>
+            </nav>
+            <div class="sidebar-section-label">
+                <span>Characters</span>
+                <div style="display:flex;gap:0.4rem;align-items:center">
+                    <span class="char-count" id="charCount">—</span>
+                    <button class="search-toggle-btn" id="searchToggle" title="Toggle character list">▲</button>
+                </div>
+            </div>
+            <div id="charPanel">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search...">
+                </div>
+                <nav class="character-list" id="characterList">
+                    <!-- Character list will be populated by JavaScript -->
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div id="content">
+                <!-- Welcome Page -->
+                <div id="welcomePage" class="welcome-page">
+                    <h1>Welcome to 42Battle</h1>
+                    <p class="intro">A Minecraft Server with unique character kits and abilities.</p>
+                    
+                    <div class="info-cards">
+                        <div class="info-card">
+                            <h3>🎮 Character Kits</h3>
+                            <p>Each character has unique stats, passive abilities, and active abilities that define their playstyle.</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>⚔️ Combat Stats</h3>
+                            <p>Characters have different strengths in melee, ranged, and magic combat with specialized defense stats.</p>
+                        </div>
+                        <div class="info-card">
+                            <h3>🛡️ Special Attributes</h3>
+                            <p>From vampirism to fire resistance, each character brings unique mechanics to the battlefield.</p>
+                        </div>
+                    </div>
+
+                    <div class="getting-started">
+                        <h2>Getting Started</h2>
+                        <p>Select a character from the sidebar to view their complete stats and abilities.</p>
+                    </div>
+                </div>
+
+                <!-- Character Page Template (will be populated dynamically) -->
+                <div id="characterPage" class="character-page" style="display: none;">
+                    <!-- Content populated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="Main/characters/template.js"></script>
+</body>
+</html>
