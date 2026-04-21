@@ -1,81 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>42Battle - Character Documentation</title>
-    <link rel="stylesheet" href="CSS/style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>42Battle — Compendium des Personnages</title>
+  <link rel="stylesheet" href="style/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
 </head>
 <body>
-    <div class="container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="sidebar-brand" id="homeBtn">
-                <div class="brand-logo">⚔</div>
-                <div>
-                    <div class="brand-title">42Battle</div>
-                    <div class="brand-sub">Character Documentation</div>
-                </div>
-            </div>
-            <nav class="sidebar-nav">
-                <a class="nav-link nav-link-home active" id="navHome">
-                    <span class="nav-icon">⌂</span> Overview
-                </a>
-            </nav>
-            <div class="sidebar-section-label">
-                <span>Characters</span>
-                <div style="display:flex;gap:0.4rem;align-items:center">
-                    <span class="char-count" id="charCount">—</span>
-                    <button class="search-toggle-btn" id="searchToggle" title="Toggle character list">▲</button>
-                </div>
-            </div>
-            <div id="charPanel">
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="Search...">
-                </div>
-                <nav class="character-list" id="characterList">
-                    <!-- Character list will be populated by JavaScript -->
-                </nav>
-            </div>
-        </aside>
 
-        <!-- Main Content -->
-        <main class="main-content">
-            <div id="content">
-                <!-- Welcome Page -->
-                <div id="welcomePage" class="welcome-page">
-                    <h1>Welcome to 42Battle</h1>
-                    <p class="intro">A Minecraft Server with unique character kits and abilities.</p>
-                    
-                    <div class="info-cards">
-                        <div class="info-card">
-                            <h3>🎮 Character Kits</h3>
-                            <p>Each character has unique stats, passive abilities, and active abilities that define their playstyle.</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>⚔️ Combat Stats</h3>
-                            <p>Characters have different strengths in melee, ranged, and magic combat with specialized defense stats.</p>
-                        </div>
-                        <div class="info-card">
-                            <h3>🛡️ Special Attributes</h3>
-                            <p>From vampirism to fire resistance, each character brings unique mechanics to the battlefield.</p>
-                        </div>
-                    </div>
-
-                    <div class="getting-started">
-                        <h2>Getting Started</h2>
-                        <p>Select a character from the sidebar to view their complete stats and abilities.</p>
-                    </div>
-                </div>
-
-                <!-- Character Page Template (will be populated dynamically) -->
-                <div id="characterPage" class="character-page" style="display: none;">
-                    <!-- Content populated by JavaScript -->
-                </div>
-            </div>
-        </main>
+  <!-- ═══════════ SIDEBAR ═══════════ -->
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <div id="logo">
+        <span class="logo-icon">⚔</span>
+        <div>
+          <span class="logo-title">42Battle</span>
+          <span class="logo-sub">Compendium</span>
+        </div>
+      </div>
+      <button id="sidebar-toggle" aria-label="Fermer le menu">✕</button>
     </div>
 
-    <script src="Main/characters/template.js"></script>
+    <div id="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input id="search" type="text" placeholder="Rechercher un personnage…" autocomplete="off" />
+    </div>
+
+    <nav id="char-nav">
+      <!-- Généré par JS -->
+    </nav>
+
+    <div id="sidebar-footer">
+      <span>42Battle Doc</span>
+      <span class="version-badge">v1.0</span>
+    </div>
+  </aside>
+
+  <!-- ═══════════ OVERLAY MOBILE ═══════════ -->
+  <div id="overlay"></div>
+
+  <!-- ═══════════ MAIN ═══════════ -->
+  <div id="layout">
+    <header id="topbar">
+      <button id="hamburger" aria-label="Ouvrir le menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div id="breadcrumb">
+        <span id="breadcrumb-section">Accueil</span>
+        <span id="breadcrumb-char"></span>
+      </div>
+      <div id="topbar-right">
+        <span id="char-count-badge"></span>
+      </div>
+    </header>
+
+    <main id="content">
+
+      <!-- ═══════════ PAGE D'ACCUEIL ═══════════ -->
+      <section id="home-page" class="page active">
+        <div class="hero">
+          <div class="hero-glow"></div>
+          <h1 class="hero-title">
+            <span class="hero-accent">42</span>Battle
+          </h1>
+          <p class="hero-subtitle">Compendium Officiel des Personnages</p>
+          <p class="hero-desc">
+            Découvrez les <strong id="total-count">42</strong> personnages jouables, leurs effets passifs, actifs et mécaniques uniques.
+            <br /><span class="en-label">Discover all playable characters, their passives, actives and unique mechanics.</span>
+          </p>
+          <div class="hero-cta">
+            <button class="btn-primary" id="btn-browse">Parcourir les personnages</button>
+          </div>
+        </div>
+
+        <div class="grid-section">
+          <h2 class="section-title"><span class="accent-line"></span>Tous les personnages <span class="en-label">All Characters</span></h2>
+          <div id="character-grid">
+            <!-- Généré par JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════ PAGE PERSONNAGE ═══════════ -->
+      <section id="char-page" class="page">
+        <div id="char-detail">
+          <!-- Généré par JS -->
+        </div>
+      </section>
+
+    </main>
+
+    <footer id="page-footer">
+      <span>42Battle Compendium — Tous droits réservés</span>
+      <span class="footer-sep">·</span>
+      <span>Données issues des fichiers officiels .kit</span>
+    </footer>
+  </div>
+
+  <script src="style/script.js"></script>
 </body>
 </html>
