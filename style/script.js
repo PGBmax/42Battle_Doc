@@ -1037,13 +1037,14 @@ function renderLines(lines) {
 }
 
 function buildAbilityBlock(ab, type) {
-  const cdHtml   = ab.cd  ? `<span class="ability-cd">${ab.cd}</span>` : '';
-  const reqHtml  = ab.req ? `<span class="ability-req">⚡ ${ab.req}</span>` : '';
+  const cdHtml   = ab.cd     ? `<span class="ability-cd">${ab.cd}</span>` : '';
+  const reqHtml  = ab.req    ? `<span class="ability-req">⚡ ${ab.req}</span>` : '';
+  const itemHtml = ab.isItem ? `<span class="ability-cd">📦 Item</span>` : '';
 
   return `
     <div class="ability-title">
       <span class="ability-name">${ab.name}</span>
-      ${cdHtml}${reqHtml}
+      ${cdHtml}${reqHtml}${itemHtml}
     </div>
     <div class="ability-body">${renderLines(ab.lines)}</div>
   `;
@@ -1055,14 +1056,12 @@ function buildAbilityBlock(ab, type) {
 
 function buildCard(char) {
   const hasPassif = char.passifs && char.passifs.length > 0;
-  const hasActif  = char.actifs  && char.actifs.length  > 0 && !char.actifs[0]?.isItem;
-  const hasItem   = char.actifs  && char.actifs.some(a => a.isItem);
+  const hasActif  = char.actifs && char.actifs.length > 0;
   const aucunEffet = char.effets.length === 1 && char.effets[0].toLowerCase() === 'aucun';
 
   const tags = [];
   if (hasPassif) tags.push(`<span class="tag tag-passif">Passif</span>`);
   if (hasActif)  tags.push(`<span class="tag tag-actif">Actif</span>`);
-  if (hasItem)   tags.push(`<span class="tag tag-item">Item</span>`);
   if (aucunEffet && !hasPassif && !hasActif) tags.push(`<span class="tag tag-aucun">—</span>`);
 
   return `
@@ -1086,10 +1085,8 @@ function buildCharPage(char, allChars) {
   // Badges
   const badges = [];
   if (char.passifs?.length) badges.push(`<span class="ability-badge badge-passif">Passif</span>`);
-  const normalActifs = char.actifs?.filter(a => !a.isItem) || [];
-  const itemActifs   = char.actifs?.filter(a => a.isItem)  || [];
-  if (normalActifs.length) badges.push(`<span class="ability-badge badge-actif">Actif</span>`);
-  if (itemActifs.length)   badges.push(`<span class="ability-badge badge-item">Item</span>`);
+  const allActifs = char.actifs || [];
+  if (allActifs.length) badges.push(`<span class="ability-badge badge-actif">Actif</span>`);
   const nonAucun = char.effets.filter(e => e.toLowerCase() !== 'aucun');
   if (nonAucun.length) badges.push(`<span class="ability-badge badge-effets">Effets passifs</span>`);
 
@@ -1114,10 +1111,10 @@ function buildCharPage(char, allChars) {
     }
   }
 
-  // Actifs normaux
+  // Actifs (items inclus)
   let actifsSections = '';
-  if (normalActifs.length) {
-    for (const a of normalActifs) {
+  if (allActifs.length) {
+    for (const a of allActifs) {
       actifsSections += `
         <div class="char-section section-actif">
           <div class="section-header">
@@ -1125,22 +1122,6 @@ function buildCharPage(char, allChars) {
             <span class="section-label">Actif <span class="section-label-en">Active</span></span>
           </div>
           <div class="section-body">${buildAbilityBlock(a, 'actif')}</div>
-        </div>
-      `;
-    }
-  }
-
-  // Items
-  let itemSections = '';
-  if (itemActifs.length) {
-    for (const a of itemActifs) {
-      itemSections += `
-        <div class="char-section section-item">
-          <div class="section-header">
-            <span class="section-icon">🟣</span>
-            <span class="section-label">Item <span class="section-label-en">Item</span></span>
-          </div>
-          <div class="section-body">${buildAbilityBlock(a, 'item')}</div>
         </div>
       `;
     }
@@ -1180,7 +1161,6 @@ function buildCharPage(char, allChars) {
 
     ${passifsSections}
     ${actifsSections}
-    ${itemSections}
   `;
 }
 
@@ -1276,6 +1256,21 @@ function closeSidebar() {
 }
 
 // ══════════════════════════════════════════════
+// THÈME CLAIR / SOMBRE
+// ══════════════════════════════════════════════
+
+const THEME_KEY = '42battle-theme';
+
+function setTheme(isDark) {
+  document.body.classList.toggle('dark', isDark);
+  const icon  = document.querySelector('#theme-toggle .theme-icon');
+  const label = document.querySelector('#theme-toggle .theme-label');
+  if (icon)  icon.textContent  = isDark ? '☀' : '🌙';
+  if (label) label.textContent = isDark ? 'Clair' : 'Sombre';
+  localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+}
+
+// ══════════════════════════════════════════════
 // EVENTS
 // ══════════════════════════════════════════════
 
@@ -1319,6 +1314,11 @@ $('hamburger').addEventListener('click', openSidebar);
 $('sidebar-toggle').addEventListener('click', closeSidebar);
 $('overlay').addEventListener('click', closeSidebar);
 
+// Toggle thème
+$('theme-toggle').addEventListener('click', () => {
+  setTheme(!document.body.classList.contains('dark'));
+});
+
 // Keyboard nav
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') {
@@ -1337,6 +1337,10 @@ document.addEventListener('keydown', e => {
 // ══════════════════════════════════════════════
 
 (function init() {
+  // Appliquer le thème sauvegardé
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  setTheme(savedTheme === 'dark');
+
   // Update total count
   const countEl = $('total-count');
   if (countEl) countEl.textContent = RAW_CHARACTERS.length;
